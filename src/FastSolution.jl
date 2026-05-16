@@ -1,4 +1,4 @@
-immutable FastSolution
+struct FastSolution
     hasSolution::Bool
     blockVision::Bool
     hasManySolution::Bool
