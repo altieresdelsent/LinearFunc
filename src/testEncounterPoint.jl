@@ -1,16 +1,18 @@
+const LinearFunc = LinearFunc2D  # shorthand alias used by tests
+
 function testEncounterPoint()
         test1Value = rand()
         #################################################################
         ############### TESTE 1 #########################################
         first = LinearFunc(test1Value,test1Value,test1Value,test1Value)
         second = LinearFunc(test1Value,test1Value,test1Value,test1Value)
-        solution::FastSolution = solveFast(first,second)
+        solution = solveFast(first,second)
         if(!solution.hasSolution)
-            print("test 1: hasSolution should be true\n")
+            println("test 1: hasSolution should be true")
         elseif(solution.blockVision)
-            print("test 1: blockVision should be false\n")
+            println("test 1: blockVision should be false")
         else
-            print("test 1: OK\n")
+            println("test 1: OK")
         end
 
         #################################################################
@@ -23,11 +25,11 @@ function testEncounterPoint()
        second = LinearFunc(test1Value+1,test1Value+1,test1Value+1,test1Value+1)
        solution = solveFast(first,second)
        if(solution.hasSolution)
-           print("test 2: hasSolution should be false\n")
+           println("test 2: hasSolution should be false")
        elseif(solution.blockVision)
-           print("test 2: blockVision should be false\n")
+           println("test 2: blockVision should be false")
        else
-           print("test 2: OK\n")
+           println("test 2: OK")
        end
 
        #################################################################
@@ -40,11 +42,11 @@ function testEncounterPoint()
       first = LinearFunc(test1Value+1,test1Value+1,test1Value+1,test1Value+1)
       solution = solveFast(first,second)
       if(solution.hasSolution)
-          print("test 3: hasSolution should be false\n")
+          println("test 3: hasSolution should be false")
       elseif(solution.blockVision)
-          print("test 3: blockVision should be false\n")
+          println("test 3: blockVision should be false")
       else
-          print("test 3: OK\n")
+          println("test 3: OK")
       end
 
       #################################################################
@@ -56,11 +58,11 @@ function testEncounterPoint()
       first = LinearFunc(test1Value+1,test1Value+1,test1Value-1,test1Value-1)
       solution = solveFast(first,second)
       if(!solution.hasSolution)
-          print("test 4: hasSolution should be true\n")
+          println("test 4: hasSolution should be true")
       elseif(!solution.blockVision)
-          print("test 4: blockVision should be true\n")
+          println("test 4: blockVision should be true")
       else
-          print("test 4: OK\n")
+          println("test 4: OK")
       end
 
       #################################################################
@@ -71,11 +73,11 @@ function testEncounterPoint()
       ############### TESTE 5 #########################################
       solution = solveFast(second,first)
       if(!solution.hasSolution)
-          print("test 5: hasSolution should be true\n")
+          println("test 5: hasSolution should be true")
       elseif(!solution.blockVision)
-          print("test 5: blockVision should be true\n")
+          println("test 5: blockVision should be true")
       else
-          print("test 5: OK\n")
+          println("test 5: OK")
       end
 
       #################################################################
@@ -88,11 +90,11 @@ function testEncounterPoint()
     first = LinearFunc(test1Value+1,test1Value+1,test1Value-1,test1Value-1)
     solution = solveFast(first,second)
     if(solution.hasSolution)
-        print("test 6: hasSolution should be false\n")
+        println("test 6: hasSolution should be false")
     elseif(solution.blockVision)
-        print("test 6: blockVision should be false\n")
+        println("test 6: blockVision should be false")
     else
-        print("test 6: OK\n")
+        println("test 6: OK")
     end
 
     #################################################################
@@ -103,11 +105,11 @@ function testEncounterPoint()
     ############### TESTE 7 #########################################
     solution = solveFast(second,first)
     if(solution.hasSolution)
-        print("test 7: hasSolution should be false\n")
+        println("test 7: hasSolution should be false")
     elseif(solution.blockVision)
-        print("test 7: blockVision should be false\n")
+        println("test 7: blockVision should be false")
     else
-        print("test 7: OK\n")
+        println("test 7: OK")
     end
 
     #################################################################
@@ -121,11 +123,11 @@ function testEncounterPoint()
     first = LinearFunc(test1Value+0.0,test1Value+2.0,test1Value+0.0,test1Value+18.0)
     solution = solveFast(first,second)
     if(!solution.hasSolution)
-        print("test 8: hasSolution should be true\n")
+        println("test 8: hasSolution should be true")
     elseif(solution.blockVision)
-        print("test 8: blockVision should be false\n")
+        println("test 8: blockVision should be false")
     else
-        print("test 8: OK\n")
+        println("test 8: OK")
     end
 
     #################################################################
@@ -136,11 +138,11 @@ function testEncounterPoint()
     ############### TESTE 9 #########################################
     solution = solveFast(second,first)
     if(!solution.hasSolution)
-        print("test 9: hasSolution should be true\n")
+        println("test 9: hasSolution should be true")
     elseif(solution.blockVision)
-        print("test 9: blockVision should be false\n")
+        println("test 9: blockVision should be false")
     else
-        print("test 9: OK\n")
+        println("test 9: OK")
     end
 
     #################################################################
@@ -155,11 +157,11 @@ function testEncounterPoint()
     first = LinearFunc(test1Value+0.0,test1Value+-2.0,test1Value+0.0,test1Value+18.0)
     solution = solveFast(first,second)
     if(!solution.hasSolution)
-        print("test 10: hasSolution should be true\n")
+        println("test 10: hasSolution should be true")
     elseif(!solution.blockVision)
-        print("test 10: blockVision should be true\n")
+        println("test 10: blockVision should be true")
     else
-        print("test 10: OK\n")
+        println("test 10: OK")
     end
 
     #################################################################
@@ -170,11 +172,11 @@ function testEncounterPoint()
     ############### TESTE 11 #########################################
     solution = solveFast(second,first)
     if(!solution.hasSolution)
-        print("test 11: hasSolution should be true\n")
+        println("test 11: hasSolution should be true")
     elseif(!solution.blockVision)
-        print("test 11: blockVision should be true\n")
+        println("test 11: blockVision should be true")
     else
-        print("test 11: OK\n")
+        println("test 11: OK")
     end
 
     #################################################################
@@ -188,11 +190,11 @@ function testEncounterPoint()
     first = LinearFunc(test1Value+0.0,test1Value+-2.0,test1Value+0.0,test1Value+18.0)
     solution = solveFast(first,second)
     if(!solution.hasSolution)
-        print("test 12: hasSolution should be true\n")
+        println("test 12: hasSolution should be true")
     elseif(solution.blockVision)
-        print("test 12: blockVision should be false\n")
+        println("test 12: blockVision should be false")
     else
-        print("test 12: OK\n")
+        println("test 12: OK")
     end
 
     #################################################################
@@ -204,11 +206,11 @@ function testEncounterPoint()
 
     solution = solveFast(second,first)
     if(!solution.hasSolution)
-        print("test 13: hasSolution should be true\n")
+        println("test 13: hasSolution should be true")
     elseif(solution.blockVision)
-        print("test 13: blockVision should be false\n")
+        println("test 13: blockVision should be false")
     else
-        print("test 13: OK\n")
+        println("test 13: OK")
     end
 
     #################################################################
@@ -222,11 +224,11 @@ function testEncounterPoint()
     first = LinearFunc(test1Value+0.0,test1Value+-2.0,test1Value+0.0,test1Value+18.0)
     solution = solveFast(first,second)
     if(!solution.hasSolution)
-        print("test 14: hasSolution should be true\n")
+        println("test 14: hasSolution should be true")
     elseif(!solution.blockVision)
-        print("test 14: blockVision should be true\n")
+        println("test 14: blockVision should be true")
     else
-        print("test 14: OK\n")
+        println("test 14: OK")
     end
 
     #################################################################
@@ -237,11 +239,11 @@ function testEncounterPoint()
     ############### TESTE 15 #########################################
     solution = solveFast(second,first)
     if(!solution.hasSolution)
-        print("test 15: hasSolution should be true\n")
+        println("test 15: hasSolution should be true")
     elseif(!solution.blockVision)
-        print("test 15: blockVision should be true\n")
+        println("test 15: blockVision should be true")
     else
-        print("test 15: OK\n")
+        println("test 15: OK")
     end
 
     #################################################################
@@ -255,11 +257,11 @@ function testEncounterPoint()
     first = LinearFunc(test1Value+0.0,test1Value+2.0,test1Value+1.0,test1Value+18.0)
     solution = solveFast(first,second)
     if(!solution.hasSolution)
-        print("test 16: hasSolution should be true\n")
+        println("test 16: hasSolution should be true")
     elseif(solution.blockVision)
-        print("test 16: blockVision should be false\n")
+        println("test 16: blockVision should be false")
     else
-        print("test 16: OK\n")
+        println("test 16: OK")
     end
 
     #################################################################
@@ -270,11 +272,11 @@ function testEncounterPoint()
     ############### TESTE 17 #########################################
     solution = solveFast(second,first)
     if(!solution.hasSolution)
-        print("test 17: hasSolution should be true\n")
+        println("test 17: hasSolution should be true")
     elseif(solution.blockVision)
-        print("test 17: blockVision should be false\n")
+        println("test 17: blockVision should be false")
     else
-        print("test 17: OK\n")
+        println("test 17: OK")
     end
 
     #################################################################
@@ -289,11 +291,11 @@ function testEncounterPoint()
     first = LinearFunc(test1Value+0.0,test1Value+-2.0,test1Value+1.0,test1Value+18.0)
     solution = solveFast(first,second)
     if(!solution.hasSolution)
-        print("test 18: hasSolution should be true\n")
+        println("test 18: hasSolution should be true")
     elseif(!solution.blockVision)
-        print("test 18: blockVision should be true\n")
+        println("test 18: blockVision should be true")
     else
-        print("test 18: OK\n")
+        println("test 18: OK")
     end
 
     #################################################################
@@ -305,11 +307,11 @@ function testEncounterPoint()
 
     solution = solveFast(second,first)
     if(!solution.hasSolution)
-        print("test 19: hasSolution should be true\n")
+        println("test 19: hasSolution should be true")
     elseif(!solution.blockVision)
-        print("test 19: blockVision should be true\n")
+        println("test 19: blockVision should be true")
     else
-        print("test 19: OK\n")
+        println("test 19: OK")
     end
 
     #################################################################
@@ -323,11 +325,11 @@ function testEncounterPoint()
     first = LinearFunc(test1Value+0.0,test1Value+2.0,test1Value+1.0,test1Value+18.0)
     solution = solveFast(first,second)
     if(!solution.hasSolution)
-        print("test 20: hasSolution should be true\n")
+        println("test 20: hasSolution should be true")
     elseif(solution.blockVision)
-        print("test 20: blockVision should be false\n")
+        println("test 20: blockVision should be false")
     else
-        print("test 20: OK\n")
+        println("test 20: OK")
     end
 
     #################################################################
@@ -338,11 +340,11 @@ function testEncounterPoint()
     ############### TESTE 21 #########################################
     solution = solveFast(second,first)
     if(!solution.hasSolution)
-        print("test 21: hasSolution should be true\n")
+        println("test 21: hasSolution should be true")
     elseif(solution.blockVision)
-        print("test 21: blockVision should be false\n")
+        println("test 21: blockVision should be false")
     else
-        print("test 21: OK\n")
+        println("test 21: OK")
     end
 
     #################################################################
@@ -355,11 +357,11 @@ function testEncounterPoint()
     first = LinearFunc(test1Value+0.0,test1Value+-2.0,test1Value+1.0,test1Value+18.0)
     solution = solveFast(first,second)
     if(!solution.hasSolution)
-        print("test 22: hasSolution should be true\n")
+        println("test 22: hasSolution should be true")
     elseif(!solution.blockVision)
-        print("test 22: blockVision should be true\n")
+        println("test 22: blockVision should be true")
     else
-        print("test 22: OK\n")
+        println("test 22: OK")
     end
 
     #################################################################
@@ -370,11 +372,11 @@ function testEncounterPoint()
     ############### TESTE 23 #########################################
     solution = solveFast(second,first)
     if(!solution.hasSolution)
-        print("test 23: hasSolution should be true\n")
+        println("test 23: hasSolution should be true")
     elseif(!solution.blockVision)
-        print("test 23: blockVision should be true\n")
+        println("test 23: blockVision should be true")
     else
-        print("test 23: OK\n")
+        println("test 23: OK")
     end
 
     #################################################################
