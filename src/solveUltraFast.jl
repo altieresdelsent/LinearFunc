@@ -69,7 +69,7 @@ function solveUltraFast(f1::LinearFunc2D, f2::LinearFunc2D)
              (both_yf & !same_y) |
              (parallel & !collinear)
 
-    blocks = xf_ov | yf_ov | col_ov | f1_on_f2 | f2_on_f1 |
+    blocks = xf_ov | yf_ov | col_ov |
              (in_range & !is_end & !no_sol)
 
     many = same_x | same_y | collinear
