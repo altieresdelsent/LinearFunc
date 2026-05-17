@@ -5,4 +5,7 @@ module LinearFunc
     include("solve.jl")
     include("solveFast.jl")
     include("solveUltraFast.jl")
+
+    export LinearFunc2D, FastSolution
+    export solve, solveFast, solveUltraFast, getEncounterPoint
 end

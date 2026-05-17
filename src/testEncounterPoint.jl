@@ -1,3 +1,7 @@
+include("LinearFunc.jl")
+using .LinearFunc
+const LinearFunc = LinearFunc2D  # shorthand alias used by tests
+
 function testEncounterPoint()
         test1Value = rand()
         #################################################################
@@ -382,3 +386,5 @@ function testEncounterPoint()
 
 
 end
+
+testEncounterPoint()

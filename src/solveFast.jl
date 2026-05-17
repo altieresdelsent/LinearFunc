@@ -20,14 +20,14 @@ function solveFast(first::LinearFunc2D,second::LinearFunc2D)
         #if it's not, it will return that it's not blocking the vision, if it is, will
         #load y and x to later check if they are in the range.
         if y != first.yMax
-            return FastSolution(false,false,false,x,y)
+            return FastSolution(false,false,false,0.0,0.0)
         end
     #the same check but now with second
     elseif second.isXFixed && second.isYFixed
         y = second.xMax*first.slope + first.bias
         x = second.xMax
         if y != second.yMax
-            return FastSolution(false,false,false,x,y)
+            return FastSolution(false,false,false,0.0,0.0)
         end
     # if first and second are perpendicular it's easy to calc the encounter point
     elseif first.isXFixed && second.isYFixed
@@ -109,8 +109,15 @@ function solveFast(first::LinearFunc2D,second::LinearFunc2D)
                     return FastSolution(true,true,true,first.x2,first.y2)
                 end
             else
-                 #they are in the same line, but they are not touching one another
-                return FastSolution(true,false,true,first.x1,first.y1)
+                 # Neither endpoint of first falls strictly inside second's interval.
+                 # Still need to check the reverse: second may be fully contained in first.
+                if first.xMax > second.xMin && first.xMin < second.xMax
+                    # Intervals overlap → lines touch, vision is blocked
+                    return FastSolution(true,true,true,first.x1,first.y1)
+                else
+                    # Intervals are disjoint → same line but no overlap, vision clear
+                    return FastSolution(true,false,true,first.x1,first.y1)
+                end
             end
         #check if both line are the same line
         elseif second.slope == first.slope && first.bias == second.bias
@@ -144,7 +151,7 @@ function solveFast(first::LinearFunc2D,second::LinearFunc2D)
     # so checks if the only solution to the system are inside of the range of both lines
     # if it is, it means that the lines are blocking the vision one from another
     if x <= first.xMax && x >= first.xMin && y <= first.yMax && y >= first.yMin && x <= second.xMax && x >= second.xMin && y <= second.yMax && y >= second.yMin
-        if (x == first.x1 && y == first.y1) || (x == first.x2 && y == first.y2) || (x == second.x1 && y == second.y1) || (x == second.x2 && y == second.y2)
+        if ((x == first.x1 && y == first.y1) || (x == first.x2 && y == first.y2)) && ((x == second.x1 && y == second.y1) || (x == second.x2 && y == second.y2))
             return FastSolution(true,false,false,x,y)
         else
             return FastSolution(true,true,false,x,y)
