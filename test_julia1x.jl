@@ -62,8 +62,8 @@ function solveRef(f1::LinearFunc2D, f2::LinearFunc2D)
     if !in_range
         return FastSolution(true, false, false, x, y)
     end
-    is_end = (x == f1.x1 && y == f1.y1) || (x == f1.x2 && y == f1.y2) ||
-             (x == f2.x1 && y == f2.y1) || (x == f2.x2 && y == f2.y2)
+    is_end = ((x == f1.x1 && y == f1.y1) || (x == f1.x2 && y == f1.y2)) &&
+             ((x == f2.x1 && y == f2.y1) || (x == f2.x2 && y == f2.y2))
     return FastSolution(true, !is_end, false, x, y)
 end
 
