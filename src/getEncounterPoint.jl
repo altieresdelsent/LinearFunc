@@ -12,7 +12,7 @@ function getEncounterPoint(first::LinearFunc2D,second::LinearFunc2D)
             return FastSolution(false,false,false)
         end
     elseif(first.isXFixed)&&(first.isYFixed)
-        y = first.xMax*second.slope + eye.bias
+        y = first.xMax*second.slope + second.bias
         x = first.xMax
         if(y != first.yMax)
             return FastSolution(false,true,false)
@@ -21,7 +21,7 @@ function getEncounterPoint(first::LinearFunc2D,second::LinearFunc2D)
         y = second.xMax*first.slope + first.bias
         x = second.xMax
         if(y != second.yMax)
-            return FastSolution(false,true,[0.0,0.0])
+            return FastSolution(false,true,false,0.0,0.0)
         end
     elseif(first.isXFixed)&&(second.isYFixed)
         x = first.xMax
