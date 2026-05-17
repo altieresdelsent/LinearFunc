@@ -1,0 +1,251 @@
+immutable LinearFunc2D
+    x1::Float64
+    y1::Float64
+    x2::Float64
+    y2::Float64
+    xMax::Float64
+    yMax::Float64
+    xMin::Float64
+    yMin::Float64
+    slope::Float64
+    slopeInv::Float64
+    bias::Float64
+    biasInv::Float64
+    isXFixed::Bool
+    isYFixed::Bool
+    function LinearFunc()
+        xMax = realmax(Float64)
+        yMax = realmax(Float64)
+        xMin = realmin(Float64)
+        yMin = realmin(Float64)
+        slope = 1.0
+        slopeInv = 1.0
+        bias = 0.0
+        biasInv = 0.0
+        isXFixed = false
+        isYFixed = false
+        return new(xMax,yMax,xMin,yMin,slope,slopeInv,bias,biasInv,isXFixed,isYFixed)
+    end
+    function LinearFunc(x1::Float64,y1::Float64,x2::Float64,y2::Float64)
+        changeX = x1 - x2
+        changeY = y1 - y2
+
+        xMax = max(x1,x2)
+        yMax = max(y1,y2)
+        xMin = min(x1,x2)
+        yMin = min(y1,y2)
+
+        if(changeX != 0.0)&&(changeY != 0)
+            slope = changeY/changeX
+            slopeInv = changeX/changeY
+            bias = y1-slope*x1
+            biasInv = x1-slopeInv*y1
+            isXFixed = false
+            isYFixed = false
+            return new(x1,y1,x2,y2,xMax,yMax,xMin,yMin,slope,slopeInv,bias,biasInv,isXFixed,isYFixed)
+        elseif(changeX != 0.0)
+            slope = 0.0
+            slopeInv = typemax(Float64)
+            bias = yMax
+            biasInv = typemax(Float64)
+            isXFixed = false
+            isYFixed = true
+            return new(x1,y1,x2,y2,xMax,yMax,xMin,yMin,slope,slopeInv,bias,biasInv,isXFixed,isYFixed)
+        elseif(changeY != 0.0)
+            slope = typemax(Float64)
+            slopeInv = 0.0
+            bias = typemax(Float64)
+            biasInv = xMax
+            isXFixed = true
+            isYFixed = false
+            return new(x1,y1,x2,y2,xMax,yMax,xMin,yMin,slope,slopeInv,bias,biasInv,isXFixed,isYFixed)
+        else
+            slope = 0.0
+            slopeInv = 0.0
+            bias = 0.0
+            biasInv = 0.0
+            isXFixed = true
+            isYFixed = true
+            return new(x1,y1,x2,y2,xMax,yMax,xMin,yMin,slope,slopeInv,bias,biasInv,isXFixed,isYFixed)
+        end
+    end
+    function LinearFunc(slope::Float64,bias::Float64,biasInv::Float64)
+        if(slope != 0.0) && (slope != typemax(Float64))
+            slope = slope
+            slopeInv = 1/slope
+            bias = bias
+            biasInv = biasInv
+            if(slope > 1)
+                yMax = realmax(Float64)- abs(here.biasInv)
+                xMax = here.yMax*slopeInv + here.biasInv
+
+                yMin = realmin(Float64)+abs(here.biasInv)
+                xMin = here.yMin*slopeInv + here.biasInv
+                return new(x1,y1,x2,y2,xMax,yMax,xMin,yMin,slope,slopeInv,bias,biasInv,isXFixed,isYFixed)
+            elseif(slope < 1)
+                xMax = realmax(Float64)-abs(here.bias)
+                yMax = here.xMax*here.slope + here.bias
+
+                xMin = realmin(Float64)+abs(here.bias)
+                yMin = here.xMin*slope + here.bias
+                return new(x1,y1,x2,y2,xMax,yMax,xMin,yMin,slope,slopeInv,bias,biasInv,isXFixed,isYFixed)
+            else
+                xMax = realmax(Float64)-abs(here.bias)
+                yMax = realmax(Float64)-abs(here.bias)
+
+                xMin = realmin(Float64)+abs(here.bias)
+                yMin = realmin(Float64)+abs(here.bias)
+                return new(x1,y1,x2,y2,xMax,yMax,xMin,yMin,slope,slopeInv,bias,biasInv,isXFixed,isYFixed)
+            end
+        elseif slope == 0.0
+            slope = 0.0
+            yMax = typemax(Float64)
+            yMin = typemin(Float64)
+            xMax = biasInv
+            xMin = biasInv
+            biasInv = biasInv
+            bias = typemax(Float64)
+            slopeInv = typemax(Float64)
+            return new(x1,y1,x2,y2,xMax,yMax,xMin,yMin,slope,slopeInv,bias,biasInv,isXFixed,isYFixed)
+        elseif slope == typemax(Float64)
+            slope = typemax(Float64)
+            xMax = typemax(Float64)
+            xMin = typemin(Float64)
+            yMax = bias
+            yMin = bias
+            bias = bias
+            biasInv = typemax(Float64)
+            slopeInv = 0.0
+            return new(x1,y1,x2,y2,xMax,yMax,xMin,yMin,slope,slopeInv,bias,biasInv,isXFixed,isYFixed)
+        end
+    end
+    function LinearFunc(x1::Float64,y1::Float64,radianAngle::Float64,mark::Bool)
+        slope = tan(radianAngle)
+        quadrant = radianAngle > 0.0       && radianAngle < pi/2      ? 1.0:0.0
+        quadrant = radianAngle > pi/2      && radianAngle < pi        ? 2.0:0.0
+        quadrant = radianAngle > pi        && radianAngle < pi/2 + pi ? 3.0:0.0
+        quadrant = radianAngle > pi/2 + pi && radianAngle < pi        ? 4.0:0.0
+        xGrows = false
+        yGrows = false
+        if quadrant == 1.0
+            xGrows = true
+            yGrows = true
+        elseif quadrant == 2.0
+            xGrows = false
+            yGrows = true
+        elseif quadrant == 3.0
+            xGrows = false
+            yGrows = false
+        elseif quadrant == 4.0
+            xGrows = true
+            yGrows = false
+        else
+            if radianAngle == 0.0
+                xGrows = true
+                slope = 0.0
+            elseif radianAngle == pi/2.0
+                yGrows = true
+                slope = typemax(Float64)
+            elseif radianAngle == (pi/2.0 + pi)
+                xGrows = false
+                slope = 0.0
+            elseif radianAngle == pi*2.0
+                yGrows = false
+                slope = typemax(Float64)
+            end
+        end
+        if(slope != 0.0) && (slope != typemax(Float64))
+            slope = slope
+            slopeInv = 1.0/slope
+
+            bias = y1-slope*x1
+            biasInv = x1-slopeInv*y1
+
+            isXFixed = false
+            isYFixed = false
+            if(slope > 1.0)
+
+                yMax = (yGrows)? realmax(Float64)- abs(biasInv):y1
+                xMax = (xGrows)? here.yMax*slopeInv + biasInv:x1
+
+                yMin = (!yGrows)? realmin(Float64)+abs(biasInv):y1
+                xMin = (!xGrows)? yMin*slopeInv + biasInv:x1
+
+                x1 = xGrows ? xMax:xMin
+                x2 = !xGrows ? xMax:xMin
+
+                y1 = yGrows ? yMax:yMin
+                y2 = !yGrows ? yMax:yMin
+                return new(x1,y1,x2,y2,xMax,yMax,xMin,yMin,slope,slopeInv,bias,biasInv,isXFixed,isYFixed)
+            elseif(slope < 1.0)
+                xMax = (xGrows)?realmax(Float64)-abs(bias):x1
+                yMax = (yGrows)?xMax*slope + bias:y1
+
+                xMin = (!xGrows)?realmin(Float64)+abs(bias):x1
+                yMin = (!yGrows)?xMin*slope + bias:y1
+
+                x1 = xGrows ? xMax:xMin
+                x2 = !xGrows ? xMax:xMin
+
+                y1 = yGrows ? yMax:yMin
+                y2 = !yGrows ? yMax:yMin
+
+                return new(x1,y1,x2,y2,xMax,yMax,xMin,yMin,slope,slopeInv,bias,biasInv,isXFixed,isYFixed)
+            else
+                xMax = (xGrows)?realmax(Float64)-abs(bias):x1
+                yMax = (yGrows)?realmax(Float64)-abs(bias):y1
+
+                xMin = (!xGrows)?realmin(Float64)+abs(bias):x1
+                yMin = (!yGrows)?realmin(Float64)+abs(bias):y1
+
+                x1 = xGrows ? xMax:xMin
+                x2 = !xGrows ? xMax:xMin
+
+                y1 = yGrows ? yMax:yMin
+                y2 = !yGrows ? yMax:yMin
+
+                return new(x1,y1,x2,y2,xMax,yMax,xMin,yMin,slope,slopeInv,bias,biasInv,isXFixed,isYFixed)
+            end
+        elseif slope == 0.0
+            slope = 0.0
+            bias = typemax(Float64)
+            slopeInv = typemax(Float64)
+
+            yMax = y1
+            yMin = y1
+            biasInv = y1
+            xMax = (xGrows)?typemax(Float64):x1
+            xMin = (!xGrows)?typemin(Float64):x1
+
+            isXFixed = false
+            isYFixed = true
+
+            x1 = xGrows ? xMax:xMin
+            x2 = !xGrows ? xMax:xMin
+
+            y1 = yGrows ? yMax:yMin
+            y2 = !yGrows ? yMax:yMin
+
+            return new(x1,y1,x2,y2,xMax,yMax,xMin,yMin,slope,slopeInv,bias,biasInv,isXFixed,isYFixed)
+        elseif slope == typemax(Float64)
+            slope = typemax(Float64)
+            slopeInv = 0.0
+            biasInv = typemax(Float64)
+            xMax = x1
+            xMin = x1
+            bias = x1
+            yMax = (yGrows)?typemax(Float64):y1
+            yMin = (!yGrows)?typemin(Float64):y1
+            isXFixed = true
+            isYFixed = false
+
+            x1 = xGrows ? xMax:xMin
+            x2 = !xGrows ? xMax:xMin
+
+            y1 = yGrows ? yMax:yMin
+            y2 = !yGrows ? yMax:yMin
+
+            return new(x1,y1,x2,y2,xMax,yMax,xMin,yMin,slope,slopeInv,bias,biasInv,isXFixed,isYFixed)
+        end
+    end
+end
