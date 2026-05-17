@@ -144,7 +144,7 @@ function solveFast(first::LinearFunc2D,second::LinearFunc2D)
     # so checks if the only solution to the system are inside of the range of both lines
     # if it is, it means that the lines are blocking the vision one from another
     if x <= first.xMax && x >= first.xMin && y <= first.yMax && y >= first.yMin && x <= second.xMax && x >= second.xMin && y <= second.yMax && y >= second.yMin
-        if (x == first.x1 && y == first.y1) || (x == first.x2 && y == first.y2) || (x == second.x1 && y == second.y1) || (x == second.x2 && y == second.y2)
+        if ((x == first.x1 && y == first.y1) || (x == first.x2 && y == first.y2)) && ((x == second.x1 && y == second.y1) || (x == second.x2 && y == second.y2))
             return FastSolution(true,false,false,x,y)
         else
             return FastSolution(true,true,false,x,y)
